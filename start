@@ -1,0 +1,15 @@
+#!/bin/sh
+
+# start dhcpd. not going to expose the args for this, since they shouldn't really change
+# start dhcp
+#/usr/sbin/dhcpd -4 -f -d --no-pid -cf /etc/dhcp/dhcpd.conf &
+
+# this is a script that will check for changes in the dchpd.conf
+/usr/sbin/auto-dhcp &
+# the script can auto-exit with parent, if necessary
+#/usr/sbin/auto_dhcp $$ &
+
+# start tftpd (exposing args, but going to leave defaults in a CMD
+exec /usr/sbin/in.tftpd $@
+# use this instead if we dont want no pass-along
+# /usr/sbin/in.tftpd -L --verbose -u tftp --secure /tftpboot

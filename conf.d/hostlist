@@ -1,0 +1,6 @@
+host myks16 {
+  hardware ethernet 00:25:64:94:7d:09;
+  fixed-address 137.78.59.47;
+}
+
+
