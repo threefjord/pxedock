@@ -51,6 +51,21 @@ EOF
 
 [ -f /etc/dhcp/conf.d/hostlist ] || touch /etc/dhcp/conf.d/hostlist
 
+if [ ! -f /tftpboot/mapfile ]; then
+cat << EOF2 > /tftpboot/mapfile
+# See http://linux.die.net/man/8/tftpd for more info.
+#
+ri	^[a-z]:				# Remove "drive letters"
+rg	\\		/		# Convert backslashes to slashes
+rg	([A-Z])		\L\1            # Convert uppercase to lowercase
+rg	\#		@		# Convert hash marks to @ signs
+rg	/../		/..no../	# Convert /../ to /..no../
+e	^ok/				# These are always ok
+r	^[^/]		/\0	        # Convert non-absolute files
+a	\.pvt$				# Reject requests for private files
+EOF2
+fi
+
 while [ 1 ]
 do
 	check_conf

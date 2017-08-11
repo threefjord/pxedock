@@ -12,7 +12,8 @@ for serving PXE-bootable images"
 #    find /tftpboot -type f -exec chmod 0444 {} + && \
 #    apk del sl_plus_deps
 
-COPY ["mapfile", "netboot.xyz.kpxe", "/tftpboot/"]
+ADD https://boot.netboot.xyz/ipxe/netboot.xyz.kpxe /tftpboot/
+#COPY ["mapfile", "netboot.xyz.kpxe", "/tftpboot/"]
 #COPY ["pxelinux.cfg", "/tftpboot/pxelinux.cfg/"]
 
 # http://forum.alpinelinux.org/apk/main/x86_64/tftp-hpa
