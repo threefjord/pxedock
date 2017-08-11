@@ -1,2 +1,3 @@
 tftpfake/
 netboot.tar.gz
+conf.d/hostlist
