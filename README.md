@@ -48,7 +48,7 @@ you need to have dhcp host entries in the form of:
       fixed-address <intended ip>;
     }
 
-In the hostlist file (mounted from host) to have the dhcp server recognize and offer addresses to them. The following are examples of possible running configurations:
+In the hostlist file (mounted from host onto container's /etc/dhcp/conf.d) to have the dhcp server recognize and offer addresses to them. The following are examples of possible running configurations (all assuming files in current directory, with hostlist in $(pwd)/conf.d/):
 
 Run a the container (without providing a host list, will not DHCPOffer, but useful to test connection?):
 
