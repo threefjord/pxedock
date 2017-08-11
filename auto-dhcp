@@ -7,7 +7,7 @@ start_dhcpd () {
 }
 
 kill_dhcpd () {
-	kill $DHCPD_PID
+	[ $DHCP_PID ] && kill $DHCPD_PID
 }
 
 check_conf () {
@@ -22,8 +22,6 @@ check_conf () {
 		echo "No changes made to hostlist, continuing"
 	fi
 }
-
-[ "x$DNS" == "x" ] && DNS=8.8.8.8
 
 if [ "x$IP" == "x" ]; then
 	ip route get $DNS > /tmp/net
@@ -47,7 +45,7 @@ subnet $subn netmask 255.255.255.0 {
 	option domain-name-servers $DNS;
 	option broadcast-address $bcast;
 	next-server $IP;
-	filename "pxelinux.0";
+	filename "netboot.xyz.kpxe";
 }
 EOF
 
@@ -56,5 +54,5 @@ EOF
 while [ 1 ]
 do
 	check_conf
-	sleep 60
+	sleep $DHCP_update_time
 done
