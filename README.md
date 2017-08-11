@@ -72,10 +72,17 @@ Run the container, providing both the hostlist, and your own tftp root (make sur
 	-p 67:67 -p 67:67/udp -p 69:69/udp \
 	slicedbread/pxedock
 
-Run the container, specifying your own DNS server, if necessary (this will be provided to the clients):
+Run the container, specifying the ip address of the interface it should listen on (will generate dhcpd.conf properly to listen to it):
 
     docker run -d --net=host \
-	-e DNS=137.78.160.9 \
+	-e IP=172.16.0.5 \
+	-p 67:67 -p 67:67/udp -p 69:69/udp \
+	slicedbread/pxedock
+
+Run the container, specifying your own DNS server, if necessary (this will be provided to the clients) (*default is 8.8.8.8*):
+
+    docker run -d --net=host \
+	-e DNS=192.168.0.2 \
 	-p 67:67 -p 67:67/udp -p 69:69/udp \
 	slicedbread/pxedock
 
