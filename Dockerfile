@@ -9,13 +9,13 @@ RUN apk add --no-cache --virtual sl_plus_deps "syslinux>=6.03-r0" && \
     find /tftpboot -type f -exec chmod 0444 {} + && \
     apk del sl_plus_deps
 
-COPY ["mapfile", "/tftpboot/"]
+COPY ["mapfile", "netboot.xyz-undionly.kpxe", "netboot.xyz.kpxe", "/tftpboot/"]
 COPY ["pxelinux.cfg", "/tftpboot/pxelinux.cfg/"]
 
 # http://forum.alpinelinux.org/apk/main/x86_64/tftp-hpa
 RUN apk add --no-cache tftp-hpa dhcp && \
     touch /var/lib/dhcp/dhcpd.leases && \
-    adduser -D tftp
+    adduser -D tftp && cp /tftpboot/netboot.xyz.kpxe /tftpboot/pxelinux.0
 
 # Do not track further change to /tftpboot or the dhcp conf directory
 VOLUME /tftpboot /etc/dhcp/conf.d
