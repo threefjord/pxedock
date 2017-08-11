@@ -33,19 +33,20 @@ else
 fi
 bcast=$subn".255"
 subn=$subn".0"
+subnetmask="255.255.255.0"
 
 cat << EOF > /etc/dhcp/dhcpd.conf
 default-lease-time 600;
 allow booting;
 allow bootp;
 log-facility local7;
-subnet $subn netmask 255.255.255.0 {
+subnet $subn netmask $subnetmask {
 	option routers $gw;
-	option subnet-mask 255.255.255.0;
+	option subnet-mask $subnetmask;
 	option domain-name-servers $DNS;
 	option broadcast-address $bcast;
 	next-server $IP;
-	filename "netboot.xyz.kpxe";
+	filename "$PXE_target";
 }
 EOF
 
