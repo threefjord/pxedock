@@ -9,7 +9,7 @@ Registry: [https://registry.hub.docker.com/u/slicedbread/pxedock/](https://regis
 Overview
 --------
 
-This source is used to build an image for a pxe-boot server.
+This source can be used to build an image for a pxe-boot server.
 The image contains:
 
 * H. Peter Anvin's [tftp server](https://git.kernel.org/cgit/network/tftp/tftp-hpa.git/)
@@ -18,8 +18,8 @@ The image contains:
 that you can easily override
 * lightweight DHCP managing [script](auto-dhcp)
 
-The image contains a base tftpd and dhcp server
-to PXE-boot your hosts. The default dhcp configuration
+The image contains a tftpd and dhcp server to
+PXE-boot your hosts. The default dhcp configuration
 will listen for broadcasts on a best guess of the
 current subnet, but will not offer any addresses. It
 will also check the hostlist for changes every minute
