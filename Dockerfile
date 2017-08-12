@@ -1,7 +1,7 @@
 FROM alpine:3.6
 
 # How often to check the hostlist for updates, default DNS, defaut pxeboot, IP
-ENV DHCP_update_time=60 DNS="8.8.8.8" PXE_target="netboot.xyz.kpxe" IP=
+ENV DHCP_update_time=60 DNS="8.8.8.8" PXE_target="netboot.xyz.kpxe" host_file="hostlist" IP=
 
 LABEL version="0.4" \
       description="dockerized dchp+tftp server,\

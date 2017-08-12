@@ -48,11 +48,12 @@ you need to have dhcp host entries in the form of:
       fixed-address <intended ip>;
     }
 
-In the hostlist file (mounted from host onto container's 
-/etc/dhcp/conf.d) to have the dhcp server recognize and 
-offer addresses to them. The following are examples of 
-possible running configurations (all assuming files in 
-current directory, with hostlist in $(pwd)/conf.d/):
+In the hostlist file (specified with the env variable 'host_file'
+(mounted from host onto container's /etc/dhcp/conf.d) to have 
+the dhcp server recognize and offer addresses to them. The 
+following are examples of possible running configurations 
+(all assuming files in current directory, with hostlist 
+in $(pwd)/conf.d/$host_file):
 
 Run a the container (without providing a host list, will 
 not DHCPOffer, but useful to test connection?):
@@ -65,6 +66,15 @@ Run the container, providing a list of hosts in a hostlist
 file in the conf.d directory:
 
     docker run -d --net=host \
+	-v $(pwd)/conf.d:/etc/dhcp/conf.d:ro \
+	-p 67:67 -p 67:67/udp -p 69:69/udp \
+	slicedbread/pxedock
+
+Run the container, providing a list of hosts in a hostlist 
+file named `list_of_hosts` in the conf.d directory:
+
+    docker run -d --net=host \
+	-e host_file=list_of_hosts \
 	-v $(pwd)/conf.d:/etc/dhcp/conf.d:ro \
 	-p 67:67 -p 67:67/udp -p 69:69/udp \
 	slicedbread/pxedock

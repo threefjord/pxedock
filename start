@@ -14,7 +14,7 @@ check_conf () {
 	SAME=$?
 	if [ $SAME -ne 0 ]; then
 		echo "hostlist changed, restarting dhcp server"
-		SHASUM=$(sha1sum /etc/dhcp/conf.d/hostlist)
+		SHASUM=$(sha1sum /etc/dhcp/conf.d/$host_file)
 		kill_dhcpd
 		start_dhcpd
 	else
@@ -57,9 +57,10 @@ subnet $subn netmask $subnetmask {
 	next-server $IP;
 	filename "$PXE_target";
 }
+include "/etc/dhcp/conf.d/$host_file";
 EOF
 
-    [ -f /etc/dhcp/conf.d/hostlist ] || touch /etc/dhcp/conf.d/hostlist
+    [ -f /etc/dhcp/conf.d/$host_file ] || touch /etc/dhcp/conf.d/$host_file
 
     if [ ! -f /tftpboot/mapfile ]; then
 cat << EOF2 > /tftpboot/mapfile
