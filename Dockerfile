@@ -4,7 +4,7 @@ FROM alpine:3.6
 ENV DHCP_update_time=60 DNS="8.8.8.8" PXE_target="netboot.xyz.kpxe" IP=
 
 LABEL version="0.4" \
-      description="A dockerized dchp+tftp server,\
+      description="dockerized dchp+tftp server,\
 for serving PXE-bootable images"
 
 ADD https://boot.netboot.xyz/ipxe/netboot.xyz.kpxe /tftpboot/
@@ -20,7 +20,7 @@ VOLUME /tftpboot /etc/dhcp/conf.d
 EXPOSE 69/udp 67/udp 67/tcp
 
 # copy in our starter-file (starts dhcp & tftpd)
-COPY ["start", "auto-dhcp", "/usr/sbin/"]
+COPY ["start","/usr/sbin/"]
 
 ENTRYPOINT ["/usr/sbin/start"]
 

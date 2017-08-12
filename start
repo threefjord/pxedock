@@ -1,15 +1,84 @@
 #!/bin/sh
 
-# start dhcpd. not going to expose the args for this, since they shouldn't really change
-# start dhcp
-#/usr/sbin/dhcpd -4 -f -d --no-pid -cf /etc/dhcp/dhcpd.conf &
+start_dhcpd () {
+	/usr/sbin/dhcpd -4 -f -d --no-pid -cf /etc/dhcp/dhcpd.conf &
+	DHCPD_PID=$!
+}
 
-# this is a script that will check for changes in the dchpd.conf
-/usr/sbin/auto-dhcp &
-# the script can auto-exit with parent, if necessary
-#/usr/sbin/auto_dhcp $$ &
+kill_dhcpd () {
+	[ $DHCP_PID ] && kill $DHCPD_PID
+}
 
-# start tftpd (exposing args, but going to leave defaults in a CMD
+check_conf () {
+	echo "$SHASUM" | sha1sum -c -
+	SAME=$?
+	if [ $SAME -ne 0 ]; then
+		echo "hostlist changed, restarting dhcp server"
+		SHASUM=$(sha1sum /etc/dhcp/conf.d/hostlist)
+		kill_dhcpd
+		start_dhcpd
+	else
+		echo "No changes made to hostlist, continuing"
+	fi
+}
+
+poll_dhcp () {
+    while [ 1 ]
+    do
+	check_conf
+	sleep $DHCP_update_time
+    done
+}
+
+
+generate_conf () {
+    if [ "x$IP" == "x" ]; then
+	ip route get $DNS > /tmp/net
+	read t t gw t t t IP < /tmp/net
+	subn=$(echo $IP | cut -f 1-3 -d .)
+    else
+	subn=$(echo $IP | cut -f 1-3 -d .)
+	gw=$subn".1"
+    fi
+    bcast=$subn".255"
+    subn=$subn".0"
+    subnetmask="255.255.255.0"
+
+cat << EOF > /etc/dhcp/dhcpd.conf
+default-lease-time 600;
+allow booting;
+allow bootp;
+log-facility local7;
+subnet $subn netmask $subnetmask {
+	option routers $gw;
+	option subnet-mask $subnetmask;
+	option domain-name-servers $DNS;
+	option broadcast-address $bcast;
+	next-server $IP;
+	filename "$PXE_target";
+}
+EOF
+
+    [ -f /etc/dhcp/conf.d/hostlist ] || touch /etc/dhcp/conf.d/hostlist
+
+    if [ ! -f /tftpboot/mapfile ]; then
+cat << EOF2 > /tftpboot/mapfile
+# See http://linux.die.net/man/8/tftpd for more info.
+#
+ri	^[a-z]:				# Remove "drive letters"
+rg	\\		/		# Convert backslashes to slashes
+rg	([A-Z])		\L\1            # Convert uppercase to lowercase
+rg	\#		@		# Convert hash marks to @ signs
+rg	/../		/..no../	# Convert /../ to /..no../
+e	^ok/				# These are always ok
+r	^[^/]		/\0	        # Convert non-absolute files
+a	\.pvt$				# Reject requests for private files
+EOF2
+    fi
+}
+
+# actually run everything
+generate_conf
+poll_dhcp &
+
 exec /usr/sbin/in.tftpd $@
-# use this instead if we dont want no pass-along
-# /usr/sbin/in.tftpd -L --verbose -u tftp --secure /tftpboot
