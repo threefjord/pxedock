@@ -1,5 +1,5 @@
 docker run -it --rm --name testa1 \
--e DNS=137.78.160.9 \
+-e DNS=8.8.8.8 \
 -v $(pwd)/conf.d:/etc/dhcp/conf.d:ro  -v $(pwd)/tftpfake:/tftpboot:ro \
 -p 67:67 -p 67:67/udp -p 69:69 --net=host \
 pxedock
