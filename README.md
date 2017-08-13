@@ -34,7 +34,7 @@ Running
 
 ### Fetch the pre-built image
 
-The runtime image is not yet published, but wil be as `slicedbread/pxedock`.
+The image is published as `slicedbread/pxedock`.
 
     docker pull slicedbread/pxedock
 
@@ -48,12 +48,13 @@ you need to have dhcp host entries in the form of:
       fixed-address <intended ip>;
     }
 
-In the hostlist file (specified with the env variable 'host_file'
-(mounted from host onto container's /etc/dhcp/conf.d) to have 
-the dhcp server recognize and offer addresses to them. The 
-following are examples of possible running configurations 
-(all assuming files in current directory, with hostlist 
-in $(pwd)/conf.d/$host_file):
+in the hostlist file, (specified with the env variable 
+'host_file', default 'hostlist', and mounted from host onto 
+container's /etc/dhcp/conf.d) to have the dhcp server 
+recognize and offer addresses to them. The following 
+are examples of possible running configurations (all 
+assuming files in current directory, with host list in 
+$(pwd)/conf.d/$host_file):
 
 Run a the container (without providing a host list, will 
 not DHCPOffer, but useful to test connection?):
