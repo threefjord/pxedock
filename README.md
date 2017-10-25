@@ -16,7 +16,7 @@ The image contains:
 * the [ISC DHCP server](https://www.isc.org/downloads/dhcp/)
 * default, minimal configuration using [`netboot.xyz`](http://netboot.xyz)
 that you can easily override
-* lightweight DHCP managing [script](auto-dhcp)
+* lightweight DHCP managing [script](start)
 
 The image contains a tftpd and dhcp server to
 PXE-boot your hosts. The default dhcp configuration
