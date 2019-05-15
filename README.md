@@ -1,7 +1,7 @@
 pxedock - PXE-booting from a docker container
 ===============================
 
-Project URL: [https://github.com/Lunsford94/pxedock/](https://github.com/Lunsford94/pxedock/)
+Project URL: [https://github.com/threefjord/pxedock/](https://github.com/threefjord/pxedock/)
 
 Registry: [https://registry.hub.docker.com/u/slicedbread/pxedock/](https://registry.hub.docker.com/u/slicedbread/pxedock/)
 
